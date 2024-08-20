@@ -11,13 +11,10 @@ namespace SportsEvent.Domain.Domain
     {
         public Guid MatchId { get; set; }
         public Match? Match { get; set; }
-
         [Required]
         public double Price { get; set; }
-
         [Required]
         public double Rating { get; set; }
         public virtual SportsEventApplicationUser? CreatedBy { get; set; }
-        
     }
 }

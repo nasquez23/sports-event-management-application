@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Create</h1>
@@ -28,11 +29,15 @@
                 <span asp-validation-for="Score" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TeamId" class="control-label"></label>
-                <select asp-for="TeamId" class ="form-control" asp-items="ViewBag.TeamId"></select>
+                <label asp-for="TeamId1" class="control-label">Team 1</label>
+                <select asp-for="TeamId1" class="form-control" asp-items="ViewBag.TeamId1"></select>
             </div>
             <div class="form-group">
-                <label asp-for="SportEventId" class="control-label"></label>
+                <label asp-for="TeamId2" class="control-label">Team 2</label>
+                 <select asp-for="TeamId2" class="form-control" asp-items="ViewBag.TeamId2"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SportEventId" class="control-label">Sport Event</label>
                 <select asp-for="SportEventId" class ="form-control" asp-items="ViewBag.SportEventId"></select>
             </div>
             <div class="form-group">

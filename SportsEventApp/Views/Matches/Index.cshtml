@@ -2,6 +2,10 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    // Retrieve the team names dictionary from ViewData
+    var teamNames = ViewData["TeamNames"] as Dictionary<Guid, string>;
 }
 
 <h1>Index</h1>
@@ -22,10 +26,13 @@
                 @Html.DisplayNameFor(model => model.Score)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Teams)
+                Team 1
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SportEvent)
+                Team 2
+            </th>
+            <th>
+                Sport Event
             </th>
             <th></th>
         </tr>
@@ -43,7 +50,14 @@
                 @Html.DisplayFor(modelItem => item.Score)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Teams)
+                @(item.TeamId1 != Guid.Empty && teamNames.ContainsKey(item.TeamId1)
+                    ? teamNames[item.TeamId1]
+                    : "Unknown Team")
+            </td>
+            <td>
+                @(item.TeamId2 != Guid.Empty && teamNames.ContainsKey(item.TeamId2)
+                    ? teamNames[item.TeamId2]
+                    : "Unknown Team")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SportEvent.Name)

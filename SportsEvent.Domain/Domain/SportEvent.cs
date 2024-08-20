@@ -10,12 +10,11 @@ namespace SportsEvent.Domain.Domain
     public class SportEvent : BaseEntity
     {
         [Required]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [Required]
-        public string Start { get; set; }
+        public DateTime Start { get; set; }
         [Required]
-        public string End { get; set; }
-        public ICollection<Match>? Matches { get; set; }
-
+        public DateTime End { get; set; }
+        public virtual ICollection<Match>? Matches { get; set; }
     }
 }

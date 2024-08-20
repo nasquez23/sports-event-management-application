@@ -10,15 +10,12 @@ namespace SportsEvent.Domain.Domain
     public class Team : BaseEntity
     {
         [Required]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [Required]
-        public string Sport { get; set; }
+        public string? Sport { get; set; }
         [Required]
-        public string Coach { get; set; }
-       
-
+        public string? Coach { get; set; }
         public ICollection<Player>? Players { get; set; }
-
         public ICollection<Match>? Matches { get; set; }
     }
 }

@@ -10,18 +10,16 @@ namespace SportsEvent.Domain.Domain
     public class Player : BaseEntity
     {
         [Required]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
         [Required]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
         [Required]
-        public string Age { get; set; }
+        public int? Age { get; set; }
         [Required]
-        public string Country { get; set; }
+        public string? Country { get; set; }
         [Required]
-        public string Position { get; set; }
+        public string? Position { get; set; }
         public Guid TeamId { get; set; }
         public Team? Team { get; set; }
-
-
     }
 }

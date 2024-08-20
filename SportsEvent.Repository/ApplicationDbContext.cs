@@ -18,6 +18,5 @@ namespace SportsEventApp.Repository
         public virtual DbSet<Match> Matches { get; set; }
         public virtual DbSet<SportEvent> SportEvents { get; set; }
         public virtual DbSet<Ticket> Tickets { get; set; }
-
     }
 }

@@ -48,7 +48,7 @@ namespace SportsEventApp.Controllers
         // GET: Players/Create
         public IActionResult Create()
         {
-            ViewData["TeamId"] = new SelectList(_context.Set<Team>(), "Id", "Coach");
+            ViewData["TeamId"] = new SelectList(_context.Team, "Id", "Name");
             return View();
         }
 
@@ -66,7 +66,7 @@ namespace SportsEventApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TeamId"] = new SelectList(_context.Set<Team>(), "Id", "Coach", player.TeamId);
+            ViewData["TeamId"] = new SelectList(_context.Team, "Id", "Name", player.TeamId);
             return View(player);
         }
 
@@ -83,7 +83,7 @@ namespace SportsEventApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["TeamId"] = new SelectList(_context.Set<Team>(), "Id", "Coach", player.TeamId);
+            ViewData["TeamId"] = new SelectList(_context.Team, "Id", "Name", player.TeamId);
             return View(player);
         }
 
@@ -119,7 +119,7 @@ namespace SportsEventApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TeamId"] = new SelectList(_context.Set<Team>(), "Id", "Coach", player.TeamId);
+            ViewData["TeamId"] = new SelectList(_context.Team, "Id", "Name", player.TeamId);
             return View(player);
         }
 
