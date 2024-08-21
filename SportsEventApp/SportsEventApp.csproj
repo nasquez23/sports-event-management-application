@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SportsEvent.Domain\SportsEvent.Domain.csproj" />
+    <ProjectReference Include="..\SportsEvent.Repository\SportsEvent.Repository.csproj" />
     <ProjectReference Include="..\SportsEvent.Service\SportsEvent.Service.csproj" />
   </ItemGroup>
 

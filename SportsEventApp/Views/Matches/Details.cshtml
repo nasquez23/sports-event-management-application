@@ -45,7 +45,7 @@
             Sport Event
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SportEvent.Name)
+            @((ViewData["SportEventNames"] as Dictionary<Guid, string>)[Model.SportEventId])
         </dd>
     </dl>
 </div>

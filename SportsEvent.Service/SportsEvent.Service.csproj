@@ -17,4 +17,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SportsEvent.Domain\SportsEvent.Domain.csproj" />
+    <ProjectReference Include="..\SportsEvent.Repository\SportsEvent.Repository.csproj" />
+  </ItemGroup>
+
 </Project>

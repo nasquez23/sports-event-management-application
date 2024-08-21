@@ -6,6 +6,7 @@
 
     // Retrieve the team names dictionary from ViewData
     var teamNames = ViewData["TeamNames"] as Dictionary<Guid, string>;
+    var sportEventsNames = ViewData["SportEventNames"] as Dictionary<Guid, string>;
 }
 
 <h1>Index</h1>
@@ -38,36 +39,39 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Score)
-            </td>
-            <td>
-                @(item.TeamId1 != Guid.Empty && teamNames.ContainsKey(item.TeamId1)
-                    ? teamNames[item.TeamId1]
-                    : "Unknown Team")
-            </td>
-            <td>
-                @(item.TeamId2 != Guid.Empty && teamNames.ContainsKey(item.TeamId2)
-                    ? teamNames[item.TeamId2]
-                    : "Unknown Team")
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SportEvent.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Score)
+                </td>
+                <td>
+                    @(item.TeamId1 != Guid.Empty && teamNames.ContainsKey(item.TeamId1)
+                        ? teamNames[item.TeamId1]
+                        : "Unknown Team")
+                </td>
+                <td>
+                    @(item.TeamId2 != Guid.Empty && teamNames.ContainsKey(item.TeamId2)
+                        ? teamNames[item.TeamId2]
+                        : "Unknown Team")
+                </td>
+                <td>
+                    @(item.SportEventId != Guid.Empty && sportEventsNames.ContainsKey(item.SportEventId)
+                        ? sportEventsNames[item.SportEventId]
+                        : "Unknown Sport Event")
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

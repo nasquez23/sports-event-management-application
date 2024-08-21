@@ -6,42 +6,44 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SportsEvent.Domain.Domain;
-using SportsEventApp.Data;
+using SportsEvent.Service.Interface;
 
 namespace SportsEventApp.Controllers
 {
     public class MatchesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IMatchService _matchService;
+        private readonly ITeamService _teamService;
+        private readonly ISportEventService _sportEventService;
 
-        public MatchesController(ApplicationDbContext context)
+        public MatchesController(IMatchService matchService, ITeamService teamService, ISportEventService sportEventService)
         {
-            _context = context;
+            _matchService = matchService;
+            _teamService = teamService;
+            _sportEventService = sportEventService;
         }
 
         // GET: Matches
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationDbContext = _context.Match.Include(m => m.SportEvent);
-            ViewData["TeamNames"] = _context.Team.ToDictionary(t => t.Id, t => t.Name);
+            ViewData["TeamNames"] = _teamService.GetAllTeams().ToDictionary(t => t.Id, t => t.Name);
+            ViewData["SportEventNames"] = _sportEventService.GetAllSportEvents().ToDictionary(se => se.Id, se => se.Name);
 
-            return View(await applicationDbContext.ToListAsync());
+            return View(_matchService.GetAllMatches());
         }
 
         // GET: Matches/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public IActionResult Details(Guid? id)
         {
+            ViewData["TeamNames"] = _teamService.GetAllTeams().ToDictionary(t => t.Id, t => t.Name);
+            ViewData["SportEventNames"] = _sportEventService.GetAllSportEvents().ToDictionary(se => se.Id, se => se.Name);
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var match = await _context.Match
-                .Include(m => m.SportEvent)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            ViewData["TeamNames"] = _context.Team.ToDictionary(t => t.Id, t => t.Name);
-
+            Match match = _matchService.GetMatch(id);
             if (match == null)
             {
                 return NotFound();
@@ -53,58 +55,59 @@ namespace SportsEventApp.Controllers
         // GET: Matches/Create
         public IActionResult Create()
         {
-            ViewData["SportEventId"] = new SelectList(_context.Set<SportEvent>(), "Id", "Name");
-            ViewData["TeamId1"] = new SelectList(_context.Team, "Id", "Name");
-            ViewData["TeamId2"] = new SelectList(_context.Team, "Id", "Name");
+            List<Team> teams = _teamService.GetAllTeams();
+            ViewData["Team1Id"] = new SelectList(teams, "Id", "Name");
+            ViewData["Team2Id"] = new SelectList(teams, "Id", "Name");
+            ViewData["SportEventId"] = new SelectList(_sportEventService.GetAllSportEvents(), "Id", "Name");
+
             return View();
         }
 
         // POST: Matches/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Date,Location,Score,TeamId1,TeamId2,SportEventId,Id")] Match match)
+        public IActionResult Create([Bind("Date,Location,Score,TeamId1,TeamId2,SportEventId,Id")] Match match)
         {
             if (ModelState.IsValid)
             {
                 match.Id = Guid.NewGuid();
-                _context.Add(match);
-                await _context.SaveChangesAsync();
+                _matchService.AddMatch(match);
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SportEventId"] = new SelectList(_context.Set<SportEvent>(), "Id", "Name", match.SportEventId);
-            ViewData["TeamId1"] = new SelectList(_context.Team, "Id", "Name");
-            ViewData["TeamId2"] = new SelectList(_context.Team, "Id", "Name");
+
+            ViewData["Team1Id"] = new SelectList(_teamService.GetAllTeams(), "Id", "Name", match.TeamId1);
+            ViewData["Team2Id"] = new SelectList(_teamService.GetAllTeams(), "Id", "Name", match.TeamId2);
+            ViewData["SportEventId"] = new SelectList(_sportEventService.GetAllSportEvents(), "Id", "Name", match.SportEventId);
+
             return View(match);
         }
 
         // GET: Matches/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public IActionResult Edit(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var match = await _context.Match.FindAsync(id);
-            ViewData["TeamId1"] = new SelectList(_context.Team, "Id", "Name");
-            ViewData["TeamId2"] = new SelectList(_context.Team, "Id", "Name");
-
+            var match = _matchService.GetMatch(id);
             if (match == null)
             {
                 return NotFound();
             }
-            ViewData["SportEventId"] = new SelectList(_context.Set<SportEvent>(), "Id", "Name", match.SportEventId);
+
+            ViewData["Team1Id"] = new SelectList(_teamService.GetAllTeams(), "Id", "Name", match.TeamId1);
+            ViewData["Team2Id"] = new SelectList(_teamService.GetAllTeams(), "Id", "Name", match.TeamId2);
+            ViewData["SportEventId"] = new SelectList(_sportEventService.GetAllSportEvents(), "Id", "Name", match.SportEventId);
+
             return View(match);
         }
 
         // POST: Matches/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Date,Location,Score,TeamId1,TeamId2,SportEventId,Id")] Match match)
+        public IActionResult Edit(Guid id, [Bind("Date,Location,Score,TeamId1,TeamId2,SportEventId,Id")] Match match)
         {
             if (id != match.Id)
             {
@@ -115,8 +118,7 @@ namespace SportsEventApp.Controllers
             {
                 try
                 {
-                    _context.Update(match);
-                    await _context.SaveChangesAsync();
+                    _matchService.UpdateMatch(match);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -131,24 +133,22 @@ namespace SportsEventApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SportEventId"] = new SelectList(_context.Set<SportEvent>(), "Id", "Name", match.SportEventId);
-            ViewData["TeamId1"] = new SelectList(_context.Team, "Id", "Name");
-            ViewData["TeamId2"] = new SelectList(_context.Team, "Id", "Name");
-            
+            ViewData["Team1Id"] = new SelectList(_teamService.GetAllTeams(), "Id", "Name", match.TeamId1);
+            ViewData["Team2Id"] = new SelectList(_teamService.GetAllTeams(), "Id", "Name", match.TeamId2);
+            ViewData["SportEventId"] = new SelectList(_sportEventService.GetAllSportEvents(), "Id", "Name", match.SportEventId);
+
             return View(match);
         }
 
         // GET: Matches/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public IActionResult Delete(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var match = await _context.Match
-                .Include(m => m.SportEvent)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Match match = _matchService.GetMatch(id);
             if (match == null)
             {
                 return NotFound();
@@ -160,21 +160,20 @@ namespace SportsEventApp.Controllers
         // POST: Matches/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
-            var match = await _context.Match.FindAsync(id);
+            Match match = _matchService.GetMatch(id);
             if (match != null)
             {
-                _context.Match.Remove(match);
+                _matchService.DeleteMatch(id);
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool MatchExists(Guid id)
         {
-            return _context.Match.Any(e => e.Id == id);
+            return _matchService.GetMatch(id) != null;
         }
     }
 }

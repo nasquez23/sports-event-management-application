@@ -1,6 +1,11 @@
+using EShop.Repository.Implementation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SportsEventApp.Data;
+using SportsEvent.Domain.Identity;
+using SportsEvent.Repository.Interface;
+using SportsEvent.Service.Implementation;
+using SportsEvent.Service.Interface;
+using SportsEventApp.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +15,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<SportsEventApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+builder.Services.AddTransient<IPlayerService, PlayerService>();
+builder.Services.AddTransient<ITeamService, TeamService>();
+builder.Services.AddTransient<IMatchService, MatchService>();
+builder.Services.AddTransient<ISportEventService, SportEventService>();
+builder.Services.AddTransient<ITicketService, TicketService>();
 
 var app = builder.Build();
 

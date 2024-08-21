@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace SportsEventApp.Data.Migrations
+namespace SportsEvent.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class UpdateModels3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

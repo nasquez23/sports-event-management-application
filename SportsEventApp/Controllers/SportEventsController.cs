@@ -6,35 +6,34 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SportsEvent.Domain.Domain;
-using SportsEventApp.Data;
+using SportsEvent.Service.Interface;
 
 namespace SportsEventApp.Controllers
 {
     public class SportEventsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ISportEventService _sportEventService;
 
-        public SportEventsController(ApplicationDbContext context)
+        public SportEventsController(ISportEventService sportEventService)
         {
-            _context = context;
+            _sportEventService = sportEventService;
         }
 
         // GET: SportEvents
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.SportEvent.ToListAsync());
+            return View(_sportEventService.GetAllSportEvents());
         }
 
         // GET: SportEvents/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public IActionResult Details(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var sportEvent = await _context.SportEvent
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var sportEvent = _sportEventService.GetSportEvent(id);
             if (sportEvent == null)
             {
                 return NotFound();
@@ -50,31 +49,28 @@ namespace SportsEventApp.Controllers
         }
 
         // POST: SportEvents/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Start,End,Id")] SportEvent sportEvent)
+        public IActionResult Create([Bind("Name,Start,End,Id")] SportEvent sportEvent)
         {
             if (ModelState.IsValid)
             {
                 sportEvent.Id = Guid.NewGuid();
-                _context.Add(sportEvent);
-                await _context.SaveChangesAsync();
+                _sportEventService.CreateSportEvent(sportEvent);
                 return RedirectToAction(nameof(Index));
             }
             return View(sportEvent);
         }
 
         // GET: SportEvents/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public IActionResult Edit(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var sportEvent = await _context.SportEvent.FindAsync(id);
+            var sportEvent = _sportEventService.GetSportEvent(id);
             if (sportEvent == null)
             {
                 return NotFound();
@@ -83,11 +79,9 @@ namespace SportsEventApp.Controllers
         }
 
         // POST: SportEvents/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Start,End,Id")] SportEvent sportEvent)
+        public IActionResult Edit(Guid id, [Bind("Name,Start,End,Id")] SportEvent sportEvent)
         {
             if (id != sportEvent.Id)
             {
@@ -98,8 +92,7 @@ namespace SportsEventApp.Controllers
             {
                 try
                 {
-                    _context.Update(sportEvent);
-                    await _context.SaveChangesAsync();
+                    _sportEventService.UpdateSportEvent(sportEvent);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -118,15 +111,14 @@ namespace SportsEventApp.Controllers
         }
 
         // GET: SportEvents/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public IActionResult Delete(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var sportEvent = await _context.SportEvent
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var sportEvent = _sportEventService.GetSportEvent(id);
             if (sportEvent == null)
             {
                 return NotFound();
@@ -138,21 +130,20 @@ namespace SportsEventApp.Controllers
         // POST: SportEvents/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
-            var sportEvent = await _context.SportEvent.FindAsync(id);
+            var sportEvent = _sportEventService.GetSportEvent(id);
             if (sportEvent != null)
             {
-                _context.SportEvent.Remove(sportEvent);
+                _sportEventService.DeleteSportEvent(id);
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool SportEventExists(Guid id)
         {
-            return _context.SportEvent.Any(e => e.Id == id);
+            return _sportEventService.GetSportEvent(id) != null;
         }
     }
 }

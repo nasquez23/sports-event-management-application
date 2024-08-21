@@ -6,37 +6,36 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SportsEvent.Domain.Domain;
-using SportsEventApp.Data;
+using SportsEvent.Service.Interface;
 
 namespace SportsEventApp.Controllers
 {
     public class PlayersController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IPlayerService _playerService;
+        private readonly ITeamService _teamService;
 
-        public PlayersController(ApplicationDbContext context)
+        public PlayersController(IPlayerService playerService, ITeamService teamService)
         {
-            _context = context;
+            _playerService = playerService;
+            _teamService = teamService;
         }
 
         // GET: Players
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationDbContext = _context.Player.Include(p => p.Team);
-            return View(await applicationDbContext.ToListAsync());
+            return View(_playerService.GetAllPlayers());
         }
 
         // GET: Players/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public IActionResult Details(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var player = await _context.Player
-                .Include(p => p.Team)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var player = _playerService.GetPlayer(id);
             if (player == null)
             {
                 return NotFound();
@@ -48,7 +47,8 @@ namespace SportsEventApp.Controllers
         // GET: Players/Create
         public IActionResult Create()
         {
-            ViewData["TeamId"] = new SelectList(_context.Team, "Id", "Name");
+            ViewData["TeamId"] = new SelectList(_teamService.GetAllTeams(), "Id", "Name");
+            Console.WriteLine("$Teams = {_teamService.GetAllTeams()}");
             return View();
         }
 
@@ -57,33 +57,32 @@ namespace SportsEventApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FirstName,LastName,Age,Country,Position,TeamId,Id")] Player player)
+        public IActionResult Create([Bind("FirstName,LastName,Age,Country,Position,TeamId,Id")] Player player)
         {
             if (ModelState.IsValid)
             {
                 player.Id = Guid.NewGuid();
-                _context.Add(player);
-                await _context.SaveChangesAsync();
+                _playerService.AddPlayer(player);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TeamId"] = new SelectList(_context.Team, "Id", "Name", player.TeamId);
+            ViewData["TeamId"] = new SelectList(_teamService.GetAllTeams(), "Id", "Name", player.TeamId);
             return View(player);
         }
 
         // GET: Players/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public IActionResult Edit(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var player = await _context.Player.FindAsync(id);
+            var player = _playerService.GetPlayer(id);
             if (player == null)
             {
                 return NotFound();
             }
-            ViewData["TeamId"] = new SelectList(_context.Team, "Id", "Name", player.TeamId);
+            ViewData["TeamId"] = new SelectList(_teamService.GetAllTeams(), "Id", "Name", player.TeamId);
             return View(player);
         }
 
@@ -92,7 +91,7 @@ namespace SportsEventApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("FirstName,LastName,Age,Country,Position,TeamId,Id")] Player player)
+        public IActionResult Edit(Guid id, [Bind("FirstName,LastName,Age,Country,Position,TeamId,Id")] Player player)
         {
             if (id != player.Id)
             {
@@ -103,8 +102,7 @@ namespace SportsEventApp.Controllers
             {
                 try
                 {
-                    _context.Update(player);
-                    await _context.SaveChangesAsync();
+                    _playerService.UpdatePlayer(player);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -119,21 +117,19 @@ namespace SportsEventApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TeamId"] = new SelectList(_context.Team, "Id", "Name", player.TeamId);
+            ViewData["TeamId"] = new SelectList(_teamService.GetAllTeams(), "Id", "Name", player.TeamId);
             return View(player);
         }
 
         // GET: Players/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public IActionResult Delete(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var player = await _context.Player
-                .Include(p => p.Team)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var player = _playerService.GetPlayer(id);
             if (player == null)
             {
                 return NotFound();
@@ -145,21 +141,20 @@ namespace SportsEventApp.Controllers
         // POST: Players/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
-            var player = await _context.Player.FindAsync(id);
+            var player = _playerService.GetPlayer(id);
             if (player != null)
             {
-                _context.Player.Remove(player);
+                _playerService.DeletePlayer(id);
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PlayerExists(Guid id)
         {
-            return _context.Player.Any(e => e.Id == id);
+            return _playerService.GetPlayer(id) != null;
         }
     }
 }

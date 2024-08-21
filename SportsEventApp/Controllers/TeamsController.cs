@@ -6,35 +6,34 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SportsEvent.Domain.Domain;
-using SportsEventApp.Data;
+using SportsEvent.Service.Interface;
 
 namespace SportsEventApp.Controllers
 {
     public class TeamsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ITeamService _teamService;
 
-        public TeamsController(ApplicationDbContext context)
+        public TeamsController(ITeamService teamService)
         {
-            _context = context;
+            _teamService = teamService;
         }
 
         // GET: Teams
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Team.ToListAsync());
+            return View(_teamService.GetAllTeams());
         }
 
         // GET: Teams/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public IActionResult Details(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var team = await _context.Team
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var team = _teamService.GetTeam(id);
             if (team == null)
             {
                 return NotFound();
@@ -42,7 +41,6 @@ namespace SportsEventApp.Controllers
 
             return View(team);
         }
-
 
         // GET: Teams/Create
         public IActionResult Create()
@@ -51,31 +49,28 @@ namespace SportsEventApp.Controllers
         }
 
         // POST: Teams/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Sport,Coach,Id")] Team team)
+        public IActionResult Create([Bind("Name,Sport,Coach,Id")] Team team)
         {
             if (ModelState.IsValid)
             {
                 team.Id = Guid.NewGuid();
-                _context.Add(team);
-                await _context.SaveChangesAsync();
+                _teamService.CreateTeam(team);
                 return RedirectToAction(nameof(Index));
             }
             return View(team);
         }
 
         // GET: Teams/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public IActionResult Edit(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var team = await _context.Team.FindAsync(id);
+            var team = _teamService.GetTeam(id);
             if (team == null)
             {
                 return NotFound();
@@ -84,11 +79,9 @@ namespace SportsEventApp.Controllers
         }
 
         // POST: Teams/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Sport,Coach,Id")] Team team)
+        public IActionResult Edit(Guid id, [Bind("Name,Sport,Coach,Id")] Team team)
         {
             if (id != team.Id)
             {
@@ -99,8 +92,7 @@ namespace SportsEventApp.Controllers
             {
                 try
                 {
-                    _context.Update(team);
-                    await _context.SaveChangesAsync();
+                    _teamService.UpdateTeam(team);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -119,15 +111,14 @@ namespace SportsEventApp.Controllers
         }
 
         // GET: Teams/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public IActionResult Delete(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var team = await _context.Team
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var team = _teamService.GetTeam(id);
             if (team == null)
             {
                 return NotFound();
@@ -139,21 +130,20 @@ namespace SportsEventApp.Controllers
         // POST: Teams/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
-            var team = await _context.Team.FindAsync(id);
+            var team = _teamService.GetTeam(id);
             if (team != null)
             {
-                _context.Team.Remove(team);
+                _teamService.DeleteTeam(id);
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TeamExists(Guid id)
         {
-            return _context.Team.Any(e => e.Id == id);
+            return _teamService.GetTeam(id) != null;
         }
     }
 }

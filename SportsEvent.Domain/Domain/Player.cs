@@ -10,6 +10,7 @@ namespace SportsEvent.Domain.Domain
     public class Player : BaseEntity
     {
         [Required]
+        [Display(Name = "First Name")]
         public string? FirstName { get; set; }
         [Required]
         public string? LastName { get; set; }
