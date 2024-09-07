@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EShop.Repository.Implementation
+namespace SportsEvent.Repository.Implementation
 {
     public class Repository<T> : IRepository<T> where T : BaseEntity
     {

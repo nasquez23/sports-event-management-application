@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportsEventApp.Repository;
 
@@ -11,9 +12,11 @@ using SportsEventApp.Repository;
 namespace SportsEvent.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240827033608_Addmig")]
+    partial class Addmig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,25 +200,6 @@ namespace SportsEvent.Repository.Migrations
                     b.ToTable("Matches");
                 });
 
-            modelBuilder.Entity("SportsEvent.Domain.Domain.Order", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("OwnerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("userId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Orders");
-                });
-
             modelBuilder.Entity("SportsEvent.Domain.Domain.Player", b =>
                 {
                     b.Property<Guid>("Id")
@@ -250,24 +234,6 @@ namespace SportsEvent.Repository.Migrations
                     b.HasIndex("TeamId");
 
                     b.ToTable("Players");
-                });
-
-            modelBuilder.Entity("SportsEvent.Domain.Domain.ShoppingCart", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("OwnerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OwnerId")
-                        .IsUnique()
-                        .HasFilter("[OwnerId] IS NOT NULL");
-
-                    b.ToTable("ShoppingCarts");
                 });
 
             modelBuilder.Entity("SportsEvent.Domain.Domain.SportEvent", b =>
@@ -345,77 +311,6 @@ namespace SportsEvent.Repository.Migrations
                     b.HasIndex("MatchId");
 
                     b.ToTable("Tickets");
-                });
-
-            modelBuilder.Entity("SportsEvent.Domain.Domain.TicketInOrder", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("TicketId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("TicketId");
-
-                    b.ToTable("TicketInOrders");
-                });
-
-            modelBuilder.Entity("SportsEvent.Domain.Domain.TicketInShoppingCart", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("ShoppingCartId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TicketId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ShoppingCartId");
-
-                    b.HasIndex("TicketId");
-
-                    b.ToTable("TicketInShoppingCarts");
-                });
-
-            modelBuilder.Entity("SportsEvent.Domain.EmailMessage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MailTo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Subject")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EmailMessages");
                 });
 
             modelBuilder.Entity("SportsEvent.Domain.Identity.SportsEventApplicationUser", b =>
@@ -558,15 +453,6 @@ namespace SportsEvent.Repository.Migrations
                     b.Navigation("SportEvent");
                 });
 
-            modelBuilder.Entity("SportsEvent.Domain.Domain.Order", b =>
-                {
-                    b.HasOne("SportsEvent.Domain.Identity.SportsEventApplicationUser", "Owner")
-                        .WithMany("Order")
-                        .HasForeignKey("OwnerId");
-
-                    b.Navigation("Owner");
-                });
-
             modelBuilder.Entity("SportsEvent.Domain.Domain.Player", b =>
                 {
                     b.HasOne("SportsEvent.Domain.Domain.Team", "Team")
@@ -576,15 +462,6 @@ namespace SportsEvent.Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("Team");
-                });
-
-            modelBuilder.Entity("SportsEvent.Domain.Domain.ShoppingCart", b =>
-                {
-                    b.HasOne("SportsEvent.Domain.Identity.SportsEventApplicationUser", "Owner")
-                        .WithOne("ShoppingCart")
-                        .HasForeignKey("SportsEvent.Domain.Domain.ShoppingCart", "OwnerId");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("SportsEvent.Domain.Domain.Ticket", b =>
@@ -604,54 +481,6 @@ namespace SportsEvent.Repository.Migrations
                     b.Navigation("Match");
                 });
 
-            modelBuilder.Entity("SportsEvent.Domain.Domain.TicketInOrder", b =>
-                {
-                    b.HasOne("SportsEvent.Domain.Domain.Order", "Order")
-                        .WithMany("TicketsInOrder")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SportsEvent.Domain.Domain.Ticket", "Ticket")
-                        .WithMany()
-                        .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Ticket");
-                });
-
-            modelBuilder.Entity("SportsEvent.Domain.Domain.TicketInShoppingCart", b =>
-                {
-                    b.HasOne("SportsEvent.Domain.Domain.ShoppingCart", "ShoppingCart")
-                        .WithMany("TicketsInShoppingCarts")
-                        .HasForeignKey("ShoppingCartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SportsEvent.Domain.Domain.Ticket", "Ticket")
-                        .WithMany()
-                        .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ShoppingCart");
-
-                    b.Navigation("Ticket");
-                });
-
-            modelBuilder.Entity("SportsEvent.Domain.Domain.Order", b =>
-                {
-                    b.Navigation("TicketsInOrder");
-                });
-
-            modelBuilder.Entity("SportsEvent.Domain.Domain.ShoppingCart", b =>
-                {
-                    b.Navigation("TicketsInShoppingCarts");
-                });
-
             modelBuilder.Entity("SportsEvent.Domain.Domain.SportEvent", b =>
                 {
                     b.Navigation("Matches");
@@ -662,13 +491,6 @@ namespace SportsEvent.Repository.Migrations
                     b.Navigation("Matches");
 
                     b.Navigation("Players");
-                });
-
-            modelBuilder.Entity("SportsEvent.Domain.Identity.SportsEventApplicationUser", b =>
-                {
-                    b.Navigation("Order");
-
-                    b.Navigation("ShoppingCart");
                 });
 #pragma warning restore 612, 618
         }
