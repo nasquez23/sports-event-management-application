@@ -5,13 +5,13 @@ VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SportsEventApp", "SportsEventApp", "{EA736CCF-D33E-4B98-ABDE-6AAE812A888B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsEventApp", "SportsEventApp\SportsEventApp.csproj", "{BAE9DB20-20B3-4126-AB76-EFC0884AF8CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsEventApp", "SportsEventApp\SportsEventApp.csproj", "{BAE9DB20-20B3-4126-AB76-EFC0884AF8CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsEvent.Domain", "SportsEvent.Domain\SportsEvent.Domain.csproj", "{E20A6065-A50A-4878-80A0-4F114CAE43A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsEvent.Domain", "SportsEvent.Domain\SportsEvent.Domain.csproj", "{E20A6065-A50A-4878-80A0-4F114CAE43A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsEvent.Repository", "SportsEvent.Repository\SportsEvent.Repository.csproj", "{D6B47193-30ED-4D78-9DA9-31D340BA4E45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsEvent.Repository", "SportsEvent.Repository\SportsEvent.Repository.csproj", "{D6B47193-30ED-4D78-9DA9-31D340BA4E45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsEvent.Service", "SportsEvent.Service\SportsEvent.Service.csproj", "{E7751923-477B-46C6-A27C-C16FAF237948}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsEvent.Service", "SportsEvent.Service\SportsEvent.Service.csproj", "{E7751923-477B-46C6-A27C-C16FAF237948}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

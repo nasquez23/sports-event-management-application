@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,13 +16,17 @@ namespace SportsEventApp.Controllers
         private readonly IMatchService _matchService;
         private readonly ITeamService _teamService;
         private readonly ISportEventService _sportEventService;
+        private readonly ITicketService _ticketService;
 
-        public MatchesController(IMatchService matchService, ITeamService teamService, ISportEventService sportEventService)
+        public MatchesController(IMatchService matchService, ITeamService teamService, ISportEventService sportEventService, ITicketService ticketService)
         {
             _matchService = matchService;
             _teamService = teamService;
             _sportEventService = sportEventService;
+            _ticketService = ticketService;
         }
+
+
 
         // GET: Matches
         public IActionResult Index()
@@ -175,5 +180,40 @@ namespace SportsEventApp.Controllers
         {
             return _matchService.GetMatch(id) != null;
         }
+
+
+        public IActionResult BuyTicket(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var match = _matchService.GetMatch(id);
+
+            Ticket t = new Ticket();
+
+            if (t != null)
+            {
+                t.MatchId= match.Id;
+                t.Match = match;
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                 
+            }
+
+            return View(t);
+        }
+
+        [HttpPost]
+        public IActionResult TicketBought(Ticket model)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            _ticketService.CreateTicket(model);
+
+
+
+            return View("Index", _ticketService.GetAllTickets());
+        }
+
     }
 }

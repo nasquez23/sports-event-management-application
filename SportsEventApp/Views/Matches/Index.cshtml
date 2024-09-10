@@ -26,12 +26,14 @@
             <th>
                 @Html.DisplayNameFor(model => model.Score)
             </th>
-            <th>
+            <!--
+            <th class="visually-hidden">
                 Team 1
             </th>
-            <th>
+            <th class="visually-hidden">
                 Team 2
-            </th>
+            </th>-->
+            <th>Teams </th>
             <th>
                 Sport Event
             </th>
@@ -51,15 +53,27 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Score)
                 </td>
-                <td>
-                    @(item.TeamId1 != Guid.Empty && teamNames.ContainsKey(item.TeamId1)
-                        ? teamNames[item.TeamId1]
-                        : "Unknown Team")
+                <!--
                 </td>
-                <td>
+                <td class="visually-hidden">
+                @(item.TeamId1 != Guid.Empty && teamNames.ContainsKey(item.TeamId1)
+                    ? teamNames[item.TeamId1]
+                    : "Unknown Team")
+                </td>
+                <td class="visually-hidden">
                     @(item.TeamId2 != Guid.Empty && teamNames.ContainsKey(item.TeamId2)
                         ? teamNames[item.TeamId2]
                         : "Unknown Team")
+                </td>
+                -->
+                <td>
+                    @(item.TeamId1 != Guid.Empty && teamNames.ContainsKey(item.TeamId1)
+                        ? teamNames[item.TeamId1]
+                        : "Unknown Team") -
+                    @(item.TeamId2 != Guid.Empty && teamNames.ContainsKey(item.TeamId2)
+                        ? teamNames[item.TeamId2]
+                        : "Unknown Team")
+
                 </td>
                 <td>
                     @(item.SportEventId != Guid.Empty && sportEventsNames.ContainsKey(item.SportEventId)
@@ -70,6 +84,7 @@
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                   
                 </td>
             </tr>
         }
