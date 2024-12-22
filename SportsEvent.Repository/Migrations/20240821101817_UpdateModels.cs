@@ -246,7 +246,7 @@ namespace SportsEvent.Repository.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MatchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
-                    Rating = table.Column<double>(type: "float", nullable: false),
+                 //   Rating = table.Column<double>(type: "float", nullable: false),
                     CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>

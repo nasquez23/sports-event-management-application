@@ -295,8 +295,8 @@ namespace SportsEvent.Repository.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<double>("Rating")
-                        .HasColumnType("float");
+                   // b.Property<double>("Rating")
+                   //     .HasColumnType("float");
 
                     b.HasKey("Id");
 
