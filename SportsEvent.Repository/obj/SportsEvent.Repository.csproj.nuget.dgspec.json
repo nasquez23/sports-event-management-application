@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\user\\Desktop\\sports-event-management-application-main\\SportsEvent.Repository\\SportsEvent.Repository.csproj": {}
+    "C:\\Users\\user\\Desktop\\sports-event-management-application\\SportsEvent.Repository\\SportsEvent.Repository.csproj": {}
   },
   "projects": {
-    "C:\\Users\\user\\Desktop\\sports-event-management-application-main\\SportsEvent.Domain\\SportsEvent.Domain.csproj": {
+    "C:\\Users\\user\\Desktop\\sports-event-management-application\\SportsEvent.Domain\\SportsEvent.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\Desktop\\sports-event-management-application-main\\SportsEvent.Domain\\SportsEvent.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Desktop\\sports-event-management-application\\SportsEvent.Domain\\SportsEvent.Domain.csproj",
         "projectName": "SportsEvent.Domain",
-        "projectPath": "C:\\Users\\user\\Desktop\\sports-event-management-application-main\\SportsEvent.Domain\\SportsEvent.Domain.csproj",
+        "projectPath": "C:\\Users\\user\\Desktop\\sports-event-management-application\\SportsEvent.Domain\\SportsEvent.Domain.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\Desktop\\sports-event-management-application-main\\SportsEvent.Domain\\obj\\",
+        "outputPath": "C:\\Users\\user\\Desktop\\sports-event-management-application\\SportsEvent.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -83,14 +83,14 @@
         }
       }
     },
-    "C:\\Users\\user\\Desktop\\sports-event-management-application-main\\SportsEvent.Repository\\SportsEvent.Repository.csproj": {
+    "C:\\Users\\user\\Desktop\\sports-event-management-application\\SportsEvent.Repository\\SportsEvent.Repository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\Desktop\\sports-event-management-application-main\\SportsEvent.Repository\\SportsEvent.Repository.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Desktop\\sports-event-management-application\\SportsEvent.Repository\\SportsEvent.Repository.csproj",
         "projectName": "SportsEvent.Repository",
-        "projectPath": "C:\\Users\\user\\Desktop\\sports-event-management-application-main\\SportsEvent.Repository\\SportsEvent.Repository.csproj",
+        "projectPath": "C:\\Users\\user\\Desktop\\sports-event-management-application\\SportsEvent.Repository\\SportsEvent.Repository.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\Desktop\\sports-event-management-application-main\\SportsEvent.Repository\\obj\\",
+        "outputPath": "C:\\Users\\user\\Desktop\\sports-event-management-application\\SportsEvent.Repository\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -112,8 +112,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\user\\Desktop\\sports-event-management-application-main\\SportsEvent.Domain\\SportsEvent.Domain.csproj": {
-                "projectPath": "C:\\Users\\user\\Desktop\\sports-event-management-application-main\\SportsEvent.Domain\\SportsEvent.Domain.csproj"
+              "C:\\Users\\user\\Desktop\\sports-event-management-application\\SportsEvent.Domain\\SportsEvent.Domain.csproj": {
+                "projectPath": "C:\\Users\\user\\Desktop\\sports-event-management-application\\SportsEvent.Domain\\SportsEvent.Domain.csproj"
               }
             }
           }

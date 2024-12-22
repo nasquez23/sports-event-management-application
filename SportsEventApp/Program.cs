@@ -1,7 +1,8 @@
-using EShop.Repository.Implementation;
+using SportsEventApp.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SportsEvent.Domain.Identity;
+using SportsEvent.Repository.Implementation;
 using SportsEvent.Repository.Interface;
 using SportsEvent.Service.Implementation;
 using SportsEvent.Service.Interface;

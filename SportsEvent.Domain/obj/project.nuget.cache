@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "rsq2IAUpNo/UCccWEsaD0dPBb3MpAfmjbUApj9iLlBIB7WkbmXyhnKpmfDT5MNPRgGcUUpNcV0hsXPugcg3Y5w==",
+  "dgSpecHash": "cQfp9AryU4Wf2B1bxiB+2//iq0eS7gLYM49aNL7vEuiHzNW709+5NZaAY0uXGJNR0H+UcaiioFhk8svprXQUfw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\user\\Desktop\\sports-event-management-application-main\\SportsEvent.Domain\\SportsEvent.Domain.csproj",
+  "projectFilePath": "C:\\Users\\user\\Desktop\\sports-event-management-application\\SportsEvent.Domain\\SportsEvent.Domain.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\user\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
