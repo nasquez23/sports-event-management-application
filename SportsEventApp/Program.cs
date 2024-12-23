@@ -33,6 +33,7 @@ builder.Services.AddTransient<IMatchService, MatchService>();
 builder.Services.AddTransient<ISportEventService, SportEventService>();
 builder.Services.AddTransient<ITicketService, TicketService>();
 builder.Services.AddTransient<IShoppingCartService, ShoppingCartService>();
+builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
